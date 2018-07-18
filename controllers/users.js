@@ -28,6 +28,7 @@ module.exports = {
 	// update an existing user
 	update: (req, res) => {
 		User.findById(req.params.id, (err, user) => {
+			if(!req.body.password) delete req.body.password
 			Object.assign(user, req.body)
 			user.save((err, updatedUser) => {
 				if(err) return res.json({message: "ERROR", payload: null, code: err.code})
