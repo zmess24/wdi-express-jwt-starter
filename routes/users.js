@@ -3,13 +3,11 @@ const
 	usersRouter = new express.Router(),
 	usersCtrl = require('../controllers/users.js')
 
-usersRouter.route('/')
-	.get(usersCtrl.index)
-	.post(usersCtrl.create)
+usersRouter.get('/', usersCtrl.index)
+usersRouter.post('/', usersCtrl.create)
 
-usersRouter.route('/:id')
-	.get(usersCtrl.show)
-	.patch(usersCtrl.update)
-	.delete(usersCtrl.destroy)
+usersRouter.get('/:id', usersCtrl.show)
+usersRouter.patch('/:id', usersCtrl.update)
+usersRouter.delete('/:id', usersCtrl.destroy)
 
 module.exports = usersRouter
