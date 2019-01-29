@@ -1,4 +1,5 @@
-require('dotenv').config()
+require('dotenv').config();
+
 const
 	express = require('express'),
 	app = express(),
@@ -17,7 +18,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 
 app.get('/api', (req, res) => {
-	res.json({message: "API root."})
+	res.json({ message: "API root." })
 })
 
 app.use('/api/users', usersRoutes)
