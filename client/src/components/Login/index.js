@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import httpClient from '../../utilities/httpClient';
 
 class Login extends Component {
     state = { 
@@ -11,6 +12,15 @@ class Login extends Component {
         this.setState({ [name]: value });
     };
 
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        let user = await httpClient.authenticate(this.state, "/api/users/authenticate");
+        if (user) {
+            this.props.onLoginSuccess();
+            this.props.history.push('/');
+        }
+    }
+
     render() {
         let { email, password } = this.state;
         return (
@@ -18,7 +28,7 @@ class Login extends Component {
                 <h1>Login</h1>
                 <div className="row">
                     <div className="column column-50 column-offset-25">
-                        <form>
+                        <form onSubmit={this.handleSubmit}>
                             <label>Email: </label>
                             <input
                                 type="text"

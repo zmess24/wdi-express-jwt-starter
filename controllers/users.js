@@ -1,4 +1,6 @@
-const User = require('../models/User.js')
+const 
+	User = require('../models/User.js'),
+	signToken = require('../serverAuth').signToken;
 
 module.exports = {
 	// list all users
@@ -20,8 +22,9 @@ module.exports = {
 	// create a new user
 	create: (req, res) => {
 		User.create(req.body, (err, user) => {
-			if(err) return res.json({message: "ERROR", payload: null, code: err.code})
-			res.json({ message: "SUCCESS", payload: user })
+			if(err) return res.json({message: "ERROR", payload: null, code: err.code});
+			const token = signToken(user)
+			res.json({ message: "SUCCESS", token })
 		})
 	},
 
@@ -42,6 +45,18 @@ module.exports = {
 		User.findByIdAndRemove(req.params.id, (err, user) => {
 			if(err) return res.json({message: "ERROR", payload: null, code: err.code})
 			res.json({ message: "SUCCESS", payload: user })
+		})
+	},
+
+	authenticate: (req, res) => {
+		let { email, password } = req.body;
+		User.findOne({ email }, (err, user) => {
+			if (!user || !user.validPassword(password)) {
+				return res.json({ success: false, message: "Invalid Credentials" });
+			}
+
+			const token = signToken(user);
+			res.json({ success: true, token });
 		})
 	}
 }
